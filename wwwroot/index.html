@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pesäpallo MerkkiAnalyzer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <nav class="nav">
+      <div class="logo">MerkkiAnalyzer</div>
+      <a href="#upload" class="nav-link">Lataa pelivideo</a>
+    </nav>
+
+    <section class="hero-content">
+      <div>
+        <p class="eyebrow">Yksityinen pesäpalloanalyysi</p>
+        <h1>Selvitä vastustajan viuhkamerkin kaava pelivideosta.</h1>
+        <p class="lead">
+          Työkalu pitkien pesäpallovideoiden analysointiin. Ensimmäinen backend-versio tallentaa videot
+          paikallisesti uploads-kansioon. AI-analyysi lisätään seuraavassa vaiheessa.
+        </p>
+        <a href="#upload" class="primary-button">Aloita analyysi</a>
+      </div>
+
+      <div class="preview-card">
+        <span class="status-dot"></span>
+        <h2>Ensimmäinen backend-vaihe</h2>
+        <p>
+          Video lähetetään palvelimelle, tallennetaan koneelle ja siitä luodaan metatiedot myöhempää analyysiä varten.
+        </p>
+        <div class="mini-result">
+          <strong>Seuraava vaihe:</strong>
+          <span>FFmpeg pilkkoo videon osiin ja tekoäly etsii etenijän lähtöhetket sekä pelinjohtajan viuhka-asennot.</span>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section id="upload" class="panel">
+      <div class="section-heading">
+        <p class="eyebrow">Videon lataus</p>
+        <h2>Lataa otteluvideo backendille</h2>
+        <p>
+          Tämä versio toimii paikallisesti omalla koneellasi. Isot videot tallennetaan projektin uploads-kansioon.
+        </p>
+      </div>
+
+      <form id="analysisForm" class="upload-form">
+        <label class="file-box" for="videoInput">
+          <input id="videoInput" name="video" type="file" accept="video/*" />
+          <span class="file-icon">🎥</span>
+          <strong>Valitse pelivideo</strong>
+          <small id="fileName">Esim. MP4, MOV, MKV, AVI tai WEBM</small>
+        </label>
+
+        <div class="form-grid">
+          <label class="field">
+            <span>Analyysin kohde</span>
+            <select id="targetInput" name="target">
+              <option value="viuhkamerkki">Viuhkamerkki</option>
+              <option value="mailamerkit">Mailamerkit / melamerkit</option>
+              <option value="molemmat">Viuhkamerkki ja mailamerkit</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Pesäväli</span>
+            <select id="basePathInput" name="basePath">
+              <option value="kaikki pesävälit">Kaikki pesävälit</option>
+              <option value="1-2">1–2-väli</option>
+              <option value="2-3">2–3-väli</option>
+              <option value="3-koti">3–koti</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Lisäohje analyysille</span>
+          <textarea
+            id="promptInput"
+            name="prompt"
+            rows="5"
+            placeholder="Esim. Keskity tilanteisiin, joissa etenijä lähtee ennen lyöntiä. Kirjaa kellonaika, pesäväli, viuhkan asento, käsien asento ja päätelty merkki."
+          ></textarea>
+        </label>
+
+        <button type="submit" class="primary-button">Lataa video palvelimelle</button>
+      </form>
+
+      <section id="resultCard" class="result-card hidden">
+        <div class="loader" id="loader"></div>
+        <div id="resultContent"></div>
+      </section>
+    </section>
+
+    <section class="panel roadmap">
+      <p class="eyebrow">Seuraava kehitysvaihe</p>
+      <h2>Mitä tämän jälkeen rakennetaan?</h2>
+      <ol>
+        <li><strong>FFmpeg:</strong> videosta poimitaan kuvia tai lyhyitä klippejä.</li>
+        <li><strong>Tilanteiden tunnistus:</strong> etsitään kohdat, joissa etenijä liikkuu.</li>
+        <li><strong>AI-analyysi:</strong> vertaillaan etenijän liikettä pelinjohtajan viuhkan ja käsien asentoihin.</li>
+        <li><strong>Raportti:</strong> tulokset näytetään aikaleimoina ja mahdollisina merkkikaavoina.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    <p>MerkkiAnalyzer — yksityinen pesäpallon videoanalyysityökalu</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

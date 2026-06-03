@@ -2,6 +2,8 @@ const videoInput = document.getElementById("videoInput");
 const fileName = document.getElementById("fileName");
 const form = document.getElementById("analysisForm");
 const promptInput = document.getElementById("promptInput");
+const targetInput = document.getElementById("targetInput");
+const basePathInput = document.getElementById("basePathInput");
 const resultCard = document.getElementById("resultCard");
 const loader = document.getElementById("loader");
 const resultContent = document.getElementById("resultContent");
@@ -10,7 +12,7 @@ videoInput.addEventListener("change", () => {
   const file = videoInput.files[0];
 
   if (!file) {
-    fileName.textContent = "MP4, MOV tai muu selaimen tukema videotiedosto";
+    fileName.textContent = "Esim. MP4, MOV tai muu videotiedosto";
     return;
   }
 
@@ -22,14 +24,11 @@ form.addEventListener("submit", (event) => {
 
   const file = videoInput.files[0];
   const prompt = promptInput.value.trim();
+  const target = targetInput.value;
+  const basePath = basePathInput.value;
 
   if (!file) {
-    showResult("Valitse ensin videotiedosto.", "error");
-    return;
-  }
-
-  if (!prompt) {
-    showResult("Kirjoita mitä haluat selvittää videosta.", "error");
+    showResult("Valitse ensin pelivideo.", "error");
     return;
   }
 
@@ -42,13 +41,45 @@ form.addEventListener("submit", (event) => {
 
     resultContent.innerHTML = `
       <p class="eyebrow">Prototyyppitulos</p>
-      <h3>Analyysipyyntö vastaanotettu</h3>
+      <h3>Analyysipyyntö muodostettu</h3>
       <p><strong>Video:</strong> ${escapeHtml(file.name)}</p>
-      <p><strong>Pyyntö:</strong> ${escapeHtml(prompt)}</p>
+      <p><strong>Kohde:</strong> ${escapeHtml(target)}</p>
+      <p><strong>Pesäväli:</strong> ${escapeHtml(basePath)}</p>
+      <p><strong>Lisäohje:</strong> ${escapeHtml(prompt || "Ei lisäohjetta")}</p>
+
+      <table class="analysis-table">
+        <thead>
+          <tr>
+            <th>Aikaleima</th>
+            <th>Tilanne</th>
+            <th>Viuhkan/käsien asento</th>
+            <th>Päätelmä</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>00:12:34</td>
+            <td>Etenijä lähtee 1–2-välille</td>
+            <td>Viuhka oikealla alhaalla, vasen käsi nousee</td>
+            <td>Mahdollinen lähtömerkki</td>
+          </tr>
+          <tr>
+            <td>00:28:10</td>
+            <td>Etenijä ei lähde</td>
+            <td>Viuhka keskellä, molemmat kädet alhaalla</td>
+            <td>Ei lähtömerkkiä</td>
+          </tr>
+          <tr>
+            <td>01:05:42</td>
+            <td>Etenijä lähtee 2–3-välille</td>
+            <td>Viuhka vasemmalla, oikea käsi käy rinnalla</td>
+            <td>Mahdollinen toistuva kaava</td>
+          </tr>
+        </tbody>
+      </table>
+
       <p>
-        Tässä prototyypissä videota ei vielä lähetetä tekoälylle.
-        Seuraava kehitysvaihe on backend, joka ottaa videon vastaan,
-        tallentaa sen ja kutsuu AI-rajapintaa analyysin tekemiseen.
+        Huom: nämä ovat esimerkkirivejä. Varsinainen analyysi vaatii backendin ja AI-videokäsittelyn.
       </p>
     `;
   }, 1000);
@@ -71,7 +102,7 @@ function formatBytes(bytes) {
 }
 
 function escapeHtml(value) {
-  return value
+  return String(value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
